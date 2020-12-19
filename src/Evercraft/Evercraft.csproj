@@ -4,4 +4,10 @@
         <TargetFramework>netstandard2.1</TargetFramework>
     </PropertyGroup>
 
+    <ItemGroup>
+      <PackageReference Include="ReactiveMarbles.PropertyChanged" Version="1.4.1" />
+      <PackageReference Include="ReactiveUI" Version="13.0.27" />
+      <PackageReference Include="ReactiveUI.Fody" Version="13.0.27" />
+    </ItemGroup>
+
 </Project>
