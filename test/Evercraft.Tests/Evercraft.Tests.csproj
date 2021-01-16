@@ -5,12 +5,18 @@
 
         <IsPackable>false</IsPackable>
     </PropertyGroup>
-
     <ItemGroup>
+        <PackageReference Include="FluentAssertions" Version="5.10.3" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
+        <PackageReference Include="NSubstitute" Version="4.2.2" />
+        <PackageReference Include="Rocket.Surgery.Extensions.Testing.Fixtures" Version="6.0.1" />
         <PackageReference Include="xunit" Version="2.4.0" />
         <PackageReference Include="xunit.runner.visualstudio" Version="2.4.0" />
         <PackageReference Include="coverlet.collector" Version="1.2.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\src\Evercraft\Evercraft.csproj" />
     </ItemGroup>
 
 </Project>
