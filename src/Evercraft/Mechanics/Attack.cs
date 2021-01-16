@@ -15,26 +15,10 @@ namespace Evercraft.Mechanics
             Attacker = attacker;
             Defender = defender;
 
-            Attacker
-                .Attack()
-                .ToPropertyEx(this, x => x.AttackRoll);
-
-            var whenCharactersChanged =
-                this.WhenPropertiesValueChanges(x => x.Attacker,
+            this.WhenPropertiesValueChanges(x => x.Attacker,
                     x => x.Defender,
-                    (attack, defend) => (attacker, defender));
-
-            var successfulAttackRoll =
-                this.WhenPropertyValueChanges(x => x.AttackRoll)
-                .CombineLatest(whenCharactersChanged,
-                    (attackRoll, characters) => (attackRoll, characters))
-                .Where(x => x.attackRoll.Modified >= x.characters.defender.ArmorClass + x.characters.defender.Dexterity.Modifier);
-            
-            successfulAttackRoll
-                .Subscribe(_ => _.characters.attacker.GainExperience());
-
-            successfulAttackRoll
-                .Select(_ => (_.attackRoll, _.characters.defender))
+                    (attack, defend) => (attacker, defender))
+                .Where(x => x.attacker != null && x.defender != null)
                 .Subscribe(ExecuteAttack);
         }
 
@@ -42,27 +26,13 @@ namespace Evercraft.Mechanics
 
         [Reactive] public Character Defender { get; private set;}
 
-        public RollEvent AttackRoll { [ObservableAsProperty] get; }
-
-        private static void ExecuteAttack((RollEvent roll, Character defender) attack)
+        private static void ExecuteAttack((Character attacker, Character defender) attack)
         {
-            var rollModifier = attack.roll.Modifier > 0 ? attack.roll.Modifier : 0;
-            var damage = attack.roll.Roll == 20 ? rollModifier * 2 + 2 : rollModifier + 1;
-            attack.defender.TakeDamaged(damage);
+            var attackRoll = attack.attacker.Attack();
+            if (attackRoll >= attack.defender.ArmorClass)
+            {
+                attack.defender.Damaged(attackRoll == 20 ? 2 : 1);
+            }
         }
-    }
-
-    public class RollEvent
-    {
-        public RollEvent(int roll, int modifier)
-        {
-            Roll = roll;
-            Modifier = modifier;
-            Modified = Roll + Modifier;
-        }
-
-        public int Roll { get; }
-        public int Modified { get; }
-        public int Modifier { get; }
     }
 }
