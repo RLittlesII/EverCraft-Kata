@@ -2,7 +2,6 @@ using System;
 using Evercraft.Dice;
 using FluentAssertions;
 using NSubstitute;
-using Rocket.Surgery.Extensions.Testing.Fixtures;
 using Xunit;
 
 namespace Evercraft.Tests
@@ -44,7 +43,7 @@ namespace Evercraft.Tests
             // When
             sut.Alignment = Alignment.Neutral;
         }
-        
+
         [Fact]
         public void WhenConstructed_ShouldHaveArmor()
         {
@@ -80,7 +79,7 @@ namespace Evercraft.Tests
                 .Received()
                 .Roll<TwentySided>();
         }
-        
+
         [Fact]
         public void WhenConstructed_ShouldNotBeDead()
         {
@@ -107,19 +106,96 @@ namespace Evercraft.Tests
                 .Should()
                 .BeTrue();
         }
-    }
 
-    internal class CharacterFixture : ITestFixtureBuilder
-    {
-        public static implicit operator Character(CharacterFixture fixture) => fixture.Build();
+        [Fact]
+        public void WhenConstructed_StrengthShouldBeDefault()
+        {
+            // Given, When
+            Character sut = new CharacterFixture();
 
-        public CharacterFixture WithRoller(IDieRoller roller) => this.With(ref _roller, roller);
+            // Then
+            sut.Strength
+                .Score
+                .Should()
+                .Be(10);
+        }
 
-        public CharacterFixture WithName(string name) => this.With(ref _name, name);
+        [Fact]
+        public void WhenConstructed_DexterityShouldBeDefault()
+        {
+            // Given, When
+            Character sut = new CharacterFixture();
 
-        private Character Build() => new Character(_roller) {Name = _name};
+            // Then
+            sut.Dexterity
+                .Score
+                .Should()
+                .Be(10);
+        }
 
-        private IDieRoller _roller = Substitute.For<IDieRoller>();
-        private string _name;
+        [Fact]
+        public void WhenConstructed_ConstitutionShouldBeDefault()
+        {
+            // Given, When
+            Character sut = new CharacterFixture();
+
+            // Then
+            sut.Constitution
+                .Score
+                .Should()
+                .Be(10);
+        }
+
+        [Fact]
+        public void WhenConstructed_WisdomShouldBeDefault()
+        {
+            // Given, When
+            Character sut = new CharacterFixture();
+
+            // Then
+            sut.Wisdom
+                .Score
+                .Should()
+                .Be(10);
+        }
+
+        [Fact]
+        public void WhenConstructed_IntelligenceShouldBeDefault()
+        {
+            // Given, When
+            Character sut = new CharacterFixture();
+
+            // Then
+            sut.Intelligence
+                .Score
+                .Should()
+                .Be(10);
+        }
+
+        [Fact]
+        public void WhenConstructed_CharismaShouldBeDefault()
+        {
+            // Given, When
+            Character sut = new CharacterFixture();
+
+            // Then
+            sut.Charisma
+                .Score
+                .Should()
+                .Be(10);
+        }
+
+        [Fact]
+        public void WhenConstructed_ShouldHaveDefaultModifier()
+        {
+            // Given, When
+            Character sut = new CharacterFixture();
+
+            // Then
+            sut.Charisma
+                .Modifier
+                .Should()
+                .Be(0);
+        }
     }
 }

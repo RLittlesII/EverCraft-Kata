@@ -19,6 +19,8 @@ namespace Evercraft
             this.WhenPropertyValueChanges(x => x.HitPoints)
                 .Select(x => x <= 0)
                 .ToPropertyEx(this, x => x.IsDead);
+
+            Strength = Dexterity = Constitution = Wisdom = Intelligence = Charisma = new Ability();
         }
 
         [Reactive] public string Name { get; set; }
@@ -28,6 +30,18 @@ namespace Evercraft
         [Reactive] public int ArmorClass { get; set; } = 10;
 
         [Reactive] public int HitPoints { get; set; } = 5;
+
+        public Ability Strength { get; }
+        
+        public Ability Dexterity { get; }
+        
+        public Ability Constitution { get; }
+        
+        public Ability Wisdom { get; }
+        
+        public Ability Intelligence { get; }
+        
+        public Ability Charisma { get; }
 
         public bool IsDead { [ObservableAsProperty] get; }
 
