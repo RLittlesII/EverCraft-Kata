@@ -1,8 +1,9 @@
+using System;
 using System.Collections.Generic;
 
 namespace Evercraft
 {
-    public class Ability
+    public abstract class Ability
     {
         private static readonly Dictionary<int, int> Table = new Dictionary<int, int>()
         {
@@ -28,7 +29,7 @@ namespace Evercraft
             {20, 5},
         };
 
-        public Ability(int score = 10)
+        protected Ability(int score = 10)
         {
             Score = score;
         }
@@ -36,5 +37,64 @@ namespace Evercraft
         public int Score { get; }
 
         public int Modifier => Table[Score];
+    }
+
+    public class Strength : Ability
+    {
+        public Strength(int score)
+            : base(score)
+        {
+        }
+    }
+
+    public class Dexterity : Ability
+    {
+        public Dexterity(int score)
+            : base(score)
+        {
+        }
+    }
+
+    public class Constitution : Ability
+    {
+        public Constitution(int score)
+            : base(score)
+        {
+        }
+    }
+
+    public class Wisdom : Ability
+    {
+        public Wisdom(int score)
+            : base(score)
+        {
+        }
+    }
+
+    public class Intelligence : Ability
+    {
+        public Intelligence(int score)
+            : base(score)
+        {
+        }
+    }
+
+    public class Charisma : Ability
+    {
+        public Charisma(int score)
+            : base(score)
+        {
+        }
+    }
+
+    public interface IAbilityFactory
+    {
+        T Create<T>(int score)
+            where T : Ability;
+    }
+
+    public class AbilityFactory : IAbilityFactory
+    {
+        public T Create<T>(int score = 10) where T : Ability => (T) Activator.CreateInstance(typeof(T), score);
     }
 }

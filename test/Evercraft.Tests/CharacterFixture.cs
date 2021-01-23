@@ -12,9 +12,12 @@ namespace Evercraft.Tests
 
         public CharacterFixture WithName(string name) => this.With(ref _name, name);
 
-        private Character Build() => new Character(_roller) {Name = _name};
+        public CharacterFixture WithFactory(IAbilityFactory factory) => this.With(ref _abilityFactory, factory);
+        private Character Build() => new Character(_roller, _abilityFactory) {Name = _name};
 
         private IDieRoller _roller = Substitute.For<IDieRoller>();
+        private IAbilityFactory _abilityFactory = new AbilityFactory();
         private string _name;
+        private Ability _strength;
     }
 }

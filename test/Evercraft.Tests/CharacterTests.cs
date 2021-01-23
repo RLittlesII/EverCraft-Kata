@@ -147,6 +147,20 @@ namespace Evercraft.Tests
         }
 
         [Fact]
+        public void WhenConstitutionScoreHigh_ShouldHaveMoreHitPoints()
+        {
+            // Given, When
+            var factory = Substitute.For<IAbilityFactory>();
+            factory.Create<Constitution>(Arg.Any<int>()).Returns(new Constitution(15));
+            Character sut = new CharacterFixture().WithFactory(factory);
+
+            // Then
+            sut.HitPoints
+                .Should()
+                .Be(7);
+        }
+
+        [Fact]
         public void WhenConstructed_WisdomShouldBeDefault()
         {
             // Given, When
