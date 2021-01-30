@@ -24,9 +24,17 @@ namespace Evercraft.Mechanics
                     x => x.Defender,
                     (attack, defend) => (attacker, defender));
 
-            this.WhenPropertyValueChanges(x => x.AttackRoll)
-                .CombineLatest(whenCharactersChanged, (attackEvent, characters) => (attackEvent, characters.defender))
-                .Where(x => x.attackEvent.Modified >= x.defender.ArmorClass + x.defender.Dexterity.Modifier)
+            var successfulAttackRoll =
+                this.WhenPropertyValueChanges(x => x.AttackRoll)
+                .CombineLatest(whenCharactersChanged,
+                    (attackRoll, characters) => (attackRoll, characters))
+                .Where(x => x.attackRoll.Modified >= x.characters.defender.ArmorClass + x.characters.defender.Dexterity.Modifier);
+            
+            successfulAttackRoll
+                .Subscribe(_ => _.characters.attacker.GainExperience());
+
+            successfulAttackRoll
+                .Select(_ => (_.attackRoll, _.characters.defender))
                 .Subscribe(ExecuteAttack);
         }
 
@@ -40,7 +48,7 @@ namespace Evercraft.Mechanics
         {
             var rollModifier = attack.roll.Modifier > 0 ? attack.roll.Modifier : 0;
             var damage = attack.roll.Roll == 20 ? rollModifier * 2 + 2 : rollModifier + 1;
-            attack.defender.Damaged(damage);
+            attack.defender.TakeDamaged(damage);
         }
     }
 
