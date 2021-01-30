@@ -1,8 +1,10 @@
 using System;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using System.Security.Cryptography;
 using DynamicData.Binding;
+using DynamicData.Kernel;
 using Evercraft.Dice;
 using Evercraft.Mechanics;
 using ReactiveMarbles.PropertyChanged;
@@ -15,6 +17,7 @@ namespace Evercraft
     {
         private readonly IDieRoller _roller;
         private readonly IAbilityFactory _abilityFactory;
+        private readonly ISubject<int> _experience = new Subject<int>();
 
         public Character(IDieRoller roller, IAbilityFactory abilityFactory)
         {
@@ -32,11 +35,27 @@ namespace Evercraft
             Intelligence = _abilityFactory.Create<Intelligence>(10);
             Charisma = _abilityFactory.Create<Charisma>(10);
 
+            Experience = new Experience();
+
             this.WhenPropertyValueChanges(x => x.Constitution)
                 .Take(1)
                 .Where(x => x != null && x.Modifier > 0)
                 .Subscribe(x => HitPoints += x.Modifier);
+
+            this.WhenPropertyValueChanges(x => x.Experience.Total)
+                .Select(_ => Math.DivRem(_, 1000, out var remainder) + 1)
+                .ToPropertyEx(this, character => character.Level);
+
+            this.WhenPropertyValueChanges(x => x.Level)
+                .Where(level => level > 1)
+                .Distinct()
+                .Subscribe(_ =>
+                {
+                    HitPoints += 5 + Constitution.Modifier;
+                });
         }
+
+        public int Level { [ObservableAsProperty] get; }
 
         [Reactive] public string Name { get; set; }
 
@@ -58,12 +77,14 @@ namespace Evercraft
         
         public Ability Charisma { get; }
 
+        public Experience Experience { get; }
+
         public bool IsDead { [ObservableAsProperty] get; }
 
-        // public RollEvent Attack() => new RollEvent(_roller.Roll<TwentySided>(), Strength.Modifier);
+        public IObservable<RollEvent> Attack() => Observable.Return(new RollEvent(_roller.Roll<TwentySided>(), Strength.Modifier + Math.DivRem(Level, 2, out var remainder)));
 
-        public IObservable<RollEvent> Attack() => Observable.Return(new RollEvent(_roller.Roll<TwentySided>(), Strength.Modifier));
+        public void GainExperience() => Experience.Increase(10);
 
-        public void Damaged(int damage) => HitPoints -= damage;
+        public void TakeDamaged(int damage) => HitPoints -= damage;
     }
 }
