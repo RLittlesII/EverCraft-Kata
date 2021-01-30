@@ -15,10 +15,18 @@ namespace Evercraft.Mechanics
             Attacker = attacker;
             Defender = defender;
 
-            this.WhenPropertiesValueChanges(x => x.Attacker,
+            Attacker
+                .Attack()
+                .ToPropertyEx(this, x => x.AttackRoll);
+
+            var whenCharactersChanged =
+                this.WhenPropertiesValueChanges(x => x.Attacker,
                     x => x.Defender,
-                    (attack, defend) => (attacker, defender))
-                .Where(x => x.attacker != null && x.defender != null)
+                    (attack, defend) => (attacker, defender));
+
+            this.WhenPropertyValueChanges(x => x.AttackRoll)
+                .CombineLatest(whenCharactersChanged, (attackEvent, characters) => (attackEvent, characters.defender))
+                .Where(x => x.attackEvent.Modified >= x.defender.ArmorClass + x.defender.Dexterity.Modifier)
                 .Subscribe(ExecuteAttack);
         }
 
@@ -26,13 +34,27 @@ namespace Evercraft.Mechanics
 
         [Reactive] public Character Defender { get; private set;}
 
-        private static void ExecuteAttack((Character attacker, Character defender) attack)
+        public RollEvent AttackRoll { [ObservableAsProperty] get; }
+
+        private static void ExecuteAttack((RollEvent roll, Character defender) attack)
         {
-            var attackRoll = attack.attacker.Attack();
-            if (attackRoll >= attack.defender.ArmorClass)
-            {
-                attack.defender.Damaged(attackRoll == 20 ? 2 : 1);
-            }
+            var rollModifier = attack.roll.Modifier > 0 ? attack.roll.Modifier : 0;
+            var damage = attack.roll.Roll == 20 ? rollModifier * 2 + 2 : rollModifier + 1;
+            attack.defender.Damaged(damage);
         }
+    }
+
+    public class RollEvent
+    {
+        public RollEvent(int roll, int modifier)
+        {
+            Roll = roll;
+            Modifier = modifier;
+            Modified = Roll + Modifier;
+        }
+
+        public int Roll { get; }
+        public int Modified { get; }
+        public int Modifier { get; }
     }
 }
