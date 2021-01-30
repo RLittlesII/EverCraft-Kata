@@ -154,6 +154,25 @@ namespace Evercraft.Tests
                 .Should()
                 .Be(5);
         }
+
+        [Fact]
+        public void WhenAttackSuccessful_AttackerGainsExperience()
+        {
+            // Given, When
+            var roller = Substitute.For<IDieRoller>();
+            roller.Roll<TwentySided>().Returns(15);
+            var factory = Substitute.For<IAbilityFactory>();
+            factory.Create<Strength>(Arg.Any<int>()).Returns(new Strength(5));
+            Character attacker = new CharacterFixture().WithFactory(factory).WithRoller(roller);
+            Attack sut = new AttackFixture().WithAttacker(attacker);
+
+            // Then
+            sut.Attacker
+                .Experience
+                .Current
+                .Should()
+                .Be(10);
+        }
     }
 
     internal class AttackFixture : ITestFixtureBuilder
