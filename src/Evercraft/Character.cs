@@ -1,10 +1,7 @@
 using System;
-using System.Reactive.Disposables;
+using System.Collections.Generic;
 using System.Reactive.Linq;
-using System.Reactive.Subjects;
-using System.Security.Cryptography;
-using DynamicData.Binding;
-using DynamicData.Kernel;
+using Evercraft.Classes;
 using Evercraft.Dice;
 using Evercraft.Mechanics;
 using ReactiveMarbles.PropertyChanged;
@@ -15,9 +12,9 @@ namespace Evercraft
 {
     public class Character : ReactiveObject
     {
+        private const int DefaultHitPoints = 5;
         private readonly IDieRoller _roller;
         private readonly IAbilityFactory _abilityFactory;
-        private readonly ISubject<int> _experience = new Subject<int>();
 
         public Character(IDieRoller roller, IAbilityFactory abilityFactory)
         {
@@ -51,7 +48,7 @@ namespace Evercraft
                 .Distinct()
                 .Subscribe(_ =>
                 {
-                    HitPoints += 5 + Constitution.Modifier;
+                    HitPoints += DefaultHitPoints + Constitution.Modifier;
                 });
         }
 
@@ -87,4 +84,20 @@ namespace Evercraft
 
         public void TakeDamaged(int damage) => HitPoints -= damage;
     }
+
+    public interface ICharacter<T>
+        where T : IClass
+    {
+        IEnumerable<Ability> Abilities { get; }
+         T Class { get; }
+    }
+
+    public class ClassCharacter<T> : ICharacter<T>
+        where T : IClass
+    {
+        public IEnumerable<Ability> Abilities { get; }
+
+        public T Class { get; }
+    }
+        
 }

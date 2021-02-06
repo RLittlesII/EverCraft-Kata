@@ -1,7 +1,6 @@
 using System;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using ReactiveMarbles.PropertyChanged;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 

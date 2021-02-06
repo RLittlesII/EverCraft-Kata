@@ -1,7 +1,5 @@
 using System;
-using System.Reactive;
 using System.Reactive.Linq;
-using System.Windows.Input;
 using ReactiveMarbles.PropertyChanged;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
