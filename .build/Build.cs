@@ -39,8 +39,9 @@ using Rocket.Surgery.Nuke.GithubActions;
         nameof(IGenerateCodeCoverageSummary.Generate_Code_Coverage_Summary),
         nameof(Default)
     },
-    ExcludedTargets = new[] { nameof(ICanClean.Clean), nameof(ICanRestoreWithDotNetCore.DotnetToolRestore) })]
-class EverCraft : NukeBuild,
+    ExcludedTargets = new[] { nameof(ICanClean.Clean), nameof(ICanRestoreWithDotNetCore.DotnetToolRestore)},
+        Enhancements = new[] { nameof(Middleware) })]
+partial class EverCraft : NukeBuild,
     ICanRestoreWithDotNetCore,
     ICanBuildWithDotNetCore,
     ICanTestWithDotNetCore,

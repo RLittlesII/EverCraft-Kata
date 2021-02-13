@@ -6,14 +6,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = ".build", ".build\.build.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Evercraft.Tests", "tests\Evercraft.Tests\Evercraft.Tests.csproj", "{E8F51048-521F-4DE9-A505-C7CC08F994D4}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".solution", ".solution", "{898896CB-127A-46DA-975F-274790769B14}"
-ProjectSection(SolutionItems) = preProject
-	GitVersion.yml = GitVersion.yml
-EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".solution", ".solution", "{6FFAC257-3B2B-4F13-BA46-849ACA3481CC}"
 ProjectSection(SolutionItems) = preProject
 	README.md = README.md
+	GitVersion.yml = GitVersion.yml
 EndProjectSection
 EndProject
 Global
