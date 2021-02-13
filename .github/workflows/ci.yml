@@ -40,18 +40,54 @@ jobs:
         uses: actions/checkout@v2
         with:
           clean: 'false'
-      - name: 📲 Install Nuke Global Tool
+          fetch-depth: '0'
+      - name: Fetch all history for all tags and branches
         run: |
-          dotnet tool install -g Nuke.GlobalTool
+          git fetch --prune
+      - name: 🔨 Use .NET Core 3.1 SDK
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '3.1.x'
+      - name: 🎁 dotnet tool restore
+        run: |
+          dotnet tool restore
       - name: 🎁 Restore
         run: |
-          nuke Restore --skip
+          dotnet nuke Restore --skip
       - name: ⚙ Build
         run: |
-          nuke Build --skip
+          dotnet nuke Build --skip
       - name: 🚦 Test
         run: |
-          nuke Test Trigger_Code_Coverage_Reports Generate_Code_Coverage_Report_Cobertura --skip
+          dotnet nuke Test Trigger_Code_Coverage_Reports Generate_Code_Coverage_Report_Cobertura --skip
       - name: 📦 Pack
         run: |
-          nuke Pack --skip
+          dotnet nuke Pack --skip
+      - name: 🐿 Publish Coverage
+        uses: codecov/codecov-action@v1
+        with:
+          name: 'actions-${{ matrix.os }}'
+      - name: 🏺 Publish logs
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+          name: 'logs'
+          path: 'artifacts/logs/'
+      - name: 🏺 Publish coverage data
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+          name: 'coverage'
+          path: 'coverage/'
+      - name: 🏺 Publish test data
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+          name: 'test data'
+          path: 'artifacts/test/'
+      - name: 🏺 Publish NuGet Packages
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+          name: 'nuget'
+          path: 'artifacts/nuget/'
