@@ -1,5 +1,14 @@
 # The EverCraft Kata
 
+<!-- history badges -->
+| GitHub Actions |
+| -------------- |
+| [![github-badge]][github] |
+| [![github-history-badge]][github] |
+<!-- history badges -->
+
+
+
 In this exercise, you will build out a domain model for a MMORPG called EverCraft for the company Blizzards of the Coast. Just follow the requirements below, pairing and test driving your code of course, and have fun.
 
 This document and template projects for several programming languages can be found on-line at [https://github.com/PuttingTheDnDInTDD/EverCraft-Kata](https://github.com/PuttingTheDnDInTDD/EverCraft-Kata).
@@ -303,3 +312,7 @@ Items that enhance a characters capabilities.
 ### Bonus Iteration - Battle Grid
 
 Build your own features here. Multiple characters can be on a grid-based map. Each square on the map has terrain that impacts the occupant or opponents attacking into it. Characters can move and weapons have ranges.
+
+[github]: https://github.com/RLittlesII/EverCraft-Kata/actions?query=workflow%3Aci
+[github-badge]: https://img.shields.io/github/workflow/status/RLittlesII/EverCraft-Kata/ci.svg?label=github&logo=github&color=b845fc&logoColor=b845fc&style=flat "GitHub Actions Status"
+[github-history-badge]: https://buildstats.info/github/chart/RLittlesII/EverCraft-Kata?includeBuildsFromPullRequest=false "GitHub Actions History"
