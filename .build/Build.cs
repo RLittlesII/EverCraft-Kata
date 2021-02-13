@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using Nuke.Common;
 using Nuke.Common.CI;
+using Nuke.Common.CI.GitHubActions;
 using Nuke.Common.Execution;
 using Nuke.Common.Git;
 using Nuke.Common.IO;
@@ -15,10 +16,30 @@ using static Nuke.Common.IO.FileSystemTasks;
 using static Nuke.Common.IO.PathConstruction;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
 using Rocket.Surgery.Nuke;
+using Rocket.Surgery.Nuke.ContinuousIntegration;
 using Rocket.Surgery.Nuke.DotNetCore;
+using Rocket.Surgery.Nuke.GithubActions;
 
 [CheckBuildProjectConfigurations]
 [ShutdownDotNetAfterServerBuild]
+[GitHubActionsSteps("ci", GitHubActionsImage.MacOsLatest,
+    AutoGenerate = true,
+    On = new[] { GitHubActionsTrigger.Push },
+    OnPushTags = new[] { "v*" },
+    OnPushBranches = new[] { "main", "iteration/*"},
+    OnPullRequestBranches = new[] { "main", "iteration/*" },
+    InvokedTargets = new[] { nameof(Default) },
+    NonEntryTargets = new[]
+    {
+        nameof(ICIEnvironment.CIEnvironment),
+        nameof(ITriggerCodeCoverageReports.Trigger_Code_Coverage_Reports),
+        nameof(ITriggerCodeCoverageReports.Generate_Code_Coverage_Report_Cobertura),
+        nameof(IGenerateCodeCoverageBadges.Generate_Code_Coverage_Badges),
+        nameof(IGenerateCodeCoverageReport.Generate_Code_Coverage_Report),
+        nameof(IGenerateCodeCoverageSummary.Generate_Code_Coverage_Summary),
+        nameof(Default)
+    },
+    ExcludedTargets = new[] { nameof(ICanClean.Clean), nameof(ICanRestoreWithDotNetCore.DotnetToolRestore) })]
 class EverCraft : NukeBuild,
     ICanRestoreWithDotNetCore,
     ICanBuildWithDotNetCore,
