@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Reactive;
 using System.Reactive.Linq;
 using Evercraft.Classes;
 using Evercraft.Dice;
@@ -12,7 +13,7 @@ namespace Evercraft
 {
     public class Character : ReactiveObject
     {
-        private const int DefaultHitPoints = 5;
+        protected const int DefaultHitPoints = 5;
         private readonly IDieRoller _roller;
         private readonly IAbilityFactory _abilityFactory;
 
@@ -43,14 +44,13 @@ namespace Evercraft
                 .Select(_ => Math.DivRem(_, 1000, out var remainder) + 1)
                 .ToPropertyEx(this, character => character.Level);
 
+            LevelUp = ReactiveCommand.Create<int>(ExecuteLevelUp);
             this.WhenPropertyValueChanges(x => x.Level)
                 .Where(level => level > 1)
                 .Distinct()
-                .Subscribe(_ =>
-                {
-                    HitPoints += DefaultHitPoints + Constitution.Modifier;
-                });
+                .InvokeCommand(LevelUp);
         }
+        public ReactiveCommand<int, Unit> LevelUp { get; set; }
 
         public int Level { [ObservableAsProperty] get; }
 
@@ -58,9 +58,9 @@ namespace Evercraft
 
         [Reactive] public Alignment Alignment { get; set; }
 
-        [Reactive] public int ArmorClass { get; set; } = 10;
+        [Reactive] public int ArmorClass { get; protected set; } = 10;
 
-        [Reactive] public int HitPoints { get; private set; } = 5;
+        [Reactive] public int HitPoints { get; protected set; } = 5;
 
         public Ability Strength { get; }
         
@@ -83,21 +83,34 @@ namespace Evercraft
         public void GainExperience() => Experience.Increase(10);
 
         public void TakeDamaged(int damage) => HitPoints -= damage;
+        
+        protected virtual void ModifyHitPoint(int level)
+        {
+            HitPoints += DefaultHitPoints + Constitution.Modifier;
+        }
+
+        private void ExecuteLevelUp(int level)
+        {
+            ModifyHitPoint(level);
+        }
     }
 
     public interface ICharacter<T>
-        where T : IClass
+        where T : ICharacterClass
     {
         IEnumerable<Ability> Abilities { get; }
          T Class { get; }
     }
 
-    public class ClassCharacter<T> : ICharacter<T>
-        where T : IClass
+    public abstract class ClassCharacter<T> : Character, ICharacter<T>
+        where T : ICharacterClass
     {
         public IEnumerable<Ability> Abilities { get; }
 
         public T Class { get; }
+
+        protected ClassCharacter(IDieRoller roller, IAbilityFactory abilityFactory) : base(roller, abilityFactory)
+        {
+        }
     }
-        
 }

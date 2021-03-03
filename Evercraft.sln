@@ -9,12 +9,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".solution", ".solution", "{6FFAC257-3B2B-4F13-BA46-849ACA3481CC}"
 ProjectSection(SolutionItems) = preProject
 	README.md = README.md
-	GitVersion.yml = GitVersion.yml
-EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".solution", ".solution", "{6FFAC257-3B2B-4F13-BA46-849ACA3481CC}"
-ProjectSection(SolutionItems) = preProject
-	README.md = README.md
 EndProjectSection
 EndProject
 Global

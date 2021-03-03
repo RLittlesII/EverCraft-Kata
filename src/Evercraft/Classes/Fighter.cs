@@ -1,17 +1,7 @@
-using System.Collections.Generic;
-using Evercraft.Classes.Traits;
 
 namespace Evercraft.Classes
 {
-    public class Fighter : ClassBase
+    public class Fighter : ICharacterClass
     {
-        protected override void Define()
-        {
-            ClassTraits = new List<ITrait>
-            {
-                new AttackTrait(),
-                new HitPointTrait()
-            };
-        }
     }
 }

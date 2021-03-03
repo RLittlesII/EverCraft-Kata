@@ -1,6 +1,5 @@
 using System.Runtime.InteropServices;
 using FluentAssertions;
-using ReactiveUI;
 using Xunit;
 
 namespace Evercraft.Tests
@@ -41,10 +40,5 @@ namespace Evercraft.Tests
                 .Should()
                 .Be(current);
         }
-    }
-
-    public abstract class TestBase
-    {
-        protected TestBase() => RxApp.DefaultExceptionHandler = new EvercraftExceptionHandler();
     }
 }
