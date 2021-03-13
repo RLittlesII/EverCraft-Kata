@@ -1,6 +1,7 @@
-using Evercraft.Classes;
+using Evercraft.Characters;
+using Evercraft.Characters.Abilities;
+using Evercraft.Characters.Classes;
 using Evercraft.Dice;
-using Evercraft.Modifiers.Class;
 using NSubstitute;
 using Rocket.Surgery.Extensions.Testing.Fixtures;
 
@@ -8,7 +9,7 @@ namespace Evercraft.Tests
 {
     internal class Giyatsu
     {
-        public static MonkCharacterFixture Character { get; } =
+        public static MonkCharacterFixture Character()  =>
             new MonkCharacterFixture()
                 .WithName(nameof(Giyatsu));
 

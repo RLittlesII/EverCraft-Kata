@@ -1,4 +1,6 @@
 using System;
+using Evercraft.Characters;
+using Evercraft.Characters.Abilities;
 using Evercraft.Dice;
 using Evercraft.Mechanics;
 using FluentAssertions;

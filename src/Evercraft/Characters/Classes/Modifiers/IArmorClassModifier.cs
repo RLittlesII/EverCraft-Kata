@@ -1,6 +1,4 @@
-using Evercraft.Classes;
-
-namespace Evercraft.Modifiers.Class
+namespace Evercraft.Characters.Classes.Modifiers
 {
     public interface IArmorClassModifier<TClass> : IClassModifier
         where TClass : ICharacterClass { }

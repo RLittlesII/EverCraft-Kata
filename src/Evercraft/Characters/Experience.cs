@@ -4,7 +4,7 @@ using System.Reactive.Subjects;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
-namespace Evercraft
+namespace Evercraft.Characters
 {
     public class Experience : ReactiveObject
     {

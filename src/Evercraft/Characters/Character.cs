@@ -4,15 +4,16 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using Evercraft.Classes;
+using Evercraft.Characters.Abilities;
+using Evercraft.Characters.Classes;
+using Evercraft.Characters.Classes.Modifiers;
 using Evercraft.Dice;
 using Evercraft.Mechanics;
-using Evercraft.Modifiers.Class;
 using ReactiveMarbles.PropertyChanged;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
-namespace Evercraft
+namespace Evercraft.Characters
 {
     public class Character : ReactiveObject
     {
@@ -65,19 +66,19 @@ namespace Evercraft
 
         [Reactive] public int HitPoints { get; protected set; } = 5;
 
-        public Ability Strength { get; }
+        [Reactive] public Ability Strength { get; private set; }
         
-        public Ability Dexterity { get; }
+        [Reactive] public Ability Dexterity { get; private set; }
         
         [Reactive] public Ability Constitution { get; private set; }
         
-        public Ability Wisdom { get; }
+        [Reactive] public Ability Wisdom { get; private set; }
         
-        public Ability Intelligence { get; }
+        [Reactive] public Ability Intelligence { get; private set; }
         
-        public Ability Charisma { get; }
+        [Reactive] public Ability Charisma { get; private set; }
 
-        public Experience Experience { get; }
+        [Reactive] public Experience Experience { get; private set; }
 
         public bool IsDead { [ObservableAsProperty] get; }
 
@@ -101,16 +102,13 @@ namespace Evercraft
     public interface ICharacter<T>
         where T : ICharacterClass
     {
-        IEnumerable<Ability> Abilities { get; }
          T Class { get; }
     }
 
     public abstract class Character<T> : Character, ICharacter<T>
         where T : ICharacterClass
     {
-        public IEnumerable<Ability> Abilities { get; }
-
-        public T Class { get; }
+        public T Class { get; protected set; }
 
         protected Character(IDieRoller roller, IAbilityFactory abilityFactory)
             : base(roller, abilityFactory)
@@ -131,5 +129,7 @@ namespace Evercraft
 
                 return Disposable.Empty;
             });
+
+        protected CompositeDisposable CharacterSubscriptions = new CompositeDisposable();
     }
 }

@@ -1,4 +1,4 @@
-namespace Evercraft
+namespace Evercraft.Characters
 {
     public enum Alignment
     {

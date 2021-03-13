@@ -1,3 +1,5 @@
+using Evercraft.Characters;
+
 namespace Evercraft.Tests
 {
     public class Hate

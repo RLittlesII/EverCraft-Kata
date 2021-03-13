@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using Evercraft.Characters;
 using FluentAssertions;
 using Xunit;
 

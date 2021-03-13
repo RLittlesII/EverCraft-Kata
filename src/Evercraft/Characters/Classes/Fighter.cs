@@ -1,8 +1,7 @@
-
 using System.Collections.Generic;
-using Evercraft.Modifiers.Class;
+using Evercraft.Characters.Classes.Modifiers;
 
-namespace Evercraft.Classes
+namespace Evercraft.Characters.Classes
 {
     public class Fighter : ICharacterClass
     {

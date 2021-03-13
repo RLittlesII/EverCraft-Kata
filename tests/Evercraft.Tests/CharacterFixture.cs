@@ -1,4 +1,6 @@
-using Evercraft.Classes;
+using Evercraft.Characters;
+using Evercraft.Characters.Abilities;
+using Evercraft.Characters.Classes;
 using Evercraft.Dice;
 using NSubstitute;
 using Rocket.Surgery.Extensions.Testing.Fixtures;

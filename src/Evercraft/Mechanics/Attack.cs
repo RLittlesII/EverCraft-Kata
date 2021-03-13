@@ -1,5 +1,6 @@
 using System;
 using System.Reactive.Linq;
+using Evercraft.Characters;
 using ReactiveMarbles.PropertyChanged;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
