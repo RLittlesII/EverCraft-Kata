@@ -52,6 +52,13 @@ namespace Evercraft.Mechanics
 
     public class RollEvent
     {
+
+        public RollEvent(int roll, int strengthModifier, int classModifier, int levelModifier)
+        {
+            Roll = roll;
+            Modifier = strengthModifier + classModifier + levelModifier;
+            Modified = Roll + Modifier;
+        }
         public RollEvent(int roll, int modifier)
         {
             Roll = roll;

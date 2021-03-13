@@ -1,10 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reactive;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Evercraft.Classes;
 using Evercraft.Dice;
 using Evercraft.Mechanics;
+using Evercraft.Modifiers.Class;
 using ReactiveMarbles.PropertyChanged;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -14,7 +17,7 @@ namespace Evercraft
     public class Character : ReactiveObject
     {
         protected const int DefaultHitPoints = 5;
-        private readonly IDieRoller _roller;
+        protected readonly IDieRoller _roller;
         private readonly IAbilityFactory _abilityFactory;
 
         public Character(IDieRoller roller, IAbilityFactory abilityFactory)
@@ -78,7 +81,7 @@ namespace Evercraft
 
         public bool IsDead { [ObservableAsProperty] get; }
 
-        public IObservable<RollEvent> Attack() => Observable.Return(new RollEvent(_roller.Roll<TwentySided>(), Strength.Modifier + Math.DivRem(Level, 2, out var remainder)));
+        public virtual IObservable<RollEvent> Attack() => Observable.Return(new RollEvent(_roller.Roll<TwentySided>(), Strength.Modifier + Math.DivRem(Level, 2, out var remainder)));
 
         public void GainExperience() => Experience.Increase(10);
 
@@ -102,15 +105,31 @@ namespace Evercraft
          T Class { get; }
     }
 
-    public abstract class ClassCharacter<T> : Character, ICharacter<T>
+    public abstract class Character<T> : Character, ICharacter<T>
         where T : ICharacterClass
     {
         public IEnumerable<Ability> Abilities { get; }
 
         public T Class { get; }
 
-        protected ClassCharacter(IDieRoller roller, IAbilityFactory abilityFactory) : base(roller, abilityFactory)
+        protected Character(IDieRoller roller, IAbilityFactory abilityFactory)
+            : base(roller, abilityFactory)
         {
         }
+
+        public override IObservable<RollEvent> Attack() =>
+            Observable.Create<RollEvent>(observer =>
+            {
+                var classAttackModifier = Class.Modifiers.FirstOrDefault(x => x is IAttackModifier)?.Value() ?? 0;
+                var rollEvent =
+                    new RollEvent(_roller.Roll<TwentySided>(),
+                        Strength.Modifier,
+                        classAttackModifier,
+                        Math.DivRem(Level, 2, out var remainder));
+                observer.OnNext(rollEvent);
+                observer.OnCompleted();
+
+                return Disposable.Empty;
+            });
     }
 }

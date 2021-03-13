@@ -14,16 +14,19 @@ namespace Evercraft.Classes
         // Modify Attack Roll + 2 every 3 levels
         public Monk()
         {
-            Modifiers = new[] {new HitPointModifier()};
+            Modifiers = new List<IClassModifier> {new HitPointModifier(), new AttackModifier()};
         }
-        public IEnumerable<Modifiers.IModifier<Monk>> Modifiers { get; set; }
 
-        private class HitPointModifier : IHitPointModifier<Monk>
+        public IEnumerable<IClassModifier> Modifiers { get; set; }
+
+        private class HitPointModifier : IHitPointModifier
         {
-            public int Modify(ICharacter<Monk> character)
-            {
-                return 1;
-            }
+            public int Value() => 1;
+        }
+        
+        private class AttackModifier : IAttackModifier
+        {
+            public int Value() => 2;
         }
     }
 }

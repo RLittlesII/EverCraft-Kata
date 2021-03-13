@@ -6,10 +6,11 @@ using Rocket.Surgery.Extensions.Testing.Fixtures;
 
 namespace Evercraft.Tests
 {
-    public class Giyatsu
+    internal class Giyatsu
     {
-        public static MonkCharacter Character { get; } =
-            new MonkCharacterFixture().WithName(nameof(Giyatsu)).WithClass(new Monk());
+        public static MonkCharacterFixture Character { get; } =
+            new MonkCharacterFixture()
+                .WithName(nameof(Giyatsu));
 
         internal class MonkCharacterFixture : ITestFixtureBuilder
         {

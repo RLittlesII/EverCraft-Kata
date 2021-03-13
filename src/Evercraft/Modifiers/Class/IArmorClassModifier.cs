@@ -2,6 +2,6 @@ using Evercraft.Classes;
 
 namespace Evercraft.Modifiers.Class
 {
-    public interface IArmorClassModifier<TClass> : IModifier<TClass>
+    public interface IArmorClassModifier<TClass> : IClassModifier
         where TClass : ICharacterClass { }
 }

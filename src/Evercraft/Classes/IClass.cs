@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Evercraft.Classes.Traits;
+using Evercraft.Modifiers.Class;
 
 namespace Evercraft.Classes
 {
@@ -20,5 +21,7 @@ namespace Evercraft.Classes
         // Modify a Characters Ability, Attack or Critical base on Targets Class
         // Abilities
         // Limitations
+        
+        IEnumerable<IClassModifier> Modifiers  { get; set; }
     }
 }
