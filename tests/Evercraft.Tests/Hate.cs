@@ -1,4 +1,5 @@
 using Evercraft.Characters;
+using Evercraft.Tests.Characters;
 
 namespace Evercraft.Tests
 {

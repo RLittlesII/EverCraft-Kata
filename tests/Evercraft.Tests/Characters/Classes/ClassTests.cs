@@ -1,4 +1,4 @@
-namespace Evercraft.Tests.Class
+namespace Evercraft.Tests.Characters.Classes
 {
     public class ClassTests
     {

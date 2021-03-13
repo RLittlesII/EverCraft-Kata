@@ -8,7 +8,7 @@ using FluentAssertions;
 using NSubstitute;
 using Xunit;
 
-namespace Evercraft.Tests.Class
+namespace Evercraft.Tests.Characters
 {
     public class MonkTests : TestBase
     {

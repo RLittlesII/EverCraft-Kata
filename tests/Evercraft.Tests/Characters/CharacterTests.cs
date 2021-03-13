@@ -6,7 +6,7 @@ using FluentAssertions;
 using NSubstitute;
 using Xunit;
 
-namespace Evercraft.Tests
+namespace Evercraft.Tests.Characters
 {
     public class CharacterTests
     {

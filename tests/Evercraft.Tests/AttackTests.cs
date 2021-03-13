@@ -3,6 +3,7 @@ using Evercraft.Characters;
 using Evercraft.Characters.Abilities;
 using Evercraft.Dice;
 using Evercraft.Mechanics;
+using Evercraft.Tests.Characters;
 using FluentAssertions;
 using NSubstitute;
 using Rocket.Surgery.Extensions.Testing.Fixtures;

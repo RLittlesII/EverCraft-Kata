@@ -5,7 +5,7 @@ using Evercraft.Dice;
 using NSubstitute;
 using Rocket.Surgery.Extensions.Testing.Fixtures;
 
-namespace Evercraft.Tests
+namespace Evercraft.Tests.Characters
 {
     internal class CharacterFixture : ITestFixtureBuilder
     {
